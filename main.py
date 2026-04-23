@@ -3,7 +3,9 @@ from tabulate import tabulate
 
 
 class MainReport:
-    """Класс родительского отчёта по умолчанию - выводит записи всех указанных файлов"""
+    """Класс родительского отчёта по умолчанию -
+    объект через метод get_result возвращает все записи файлов из словаря lst"""
+
     def __init__(self, lst):
         self._lst = lst
 
@@ -24,6 +26,8 @@ class MainReport:
 
 
 class ClickbaitReport(MainReport):
+    """Дочерний класс для отчёта clickbait"""
+
     _COLS = ('title', 'ctr', 'retention_rate')
 
     def _valid_output(self, d):
@@ -39,6 +43,9 @@ class ClickbaitReport(MainReport):
 
 
 class Handler:
+    """Обработчик - читает переданные параметры из консоли, создаёт нужный объект отчёта,
+    выводит в консоль информацию"""
+
     REPORTS = {'main': MainReport, 'clickbait': ClickbaitReport}
 
     @staticmethod
@@ -53,14 +60,13 @@ class Handler:
     def get(self):
         try:
             report_obj = self.REPORTS[self._parser_func()['report']](self._parser_func()['files'])
-            print(report_obj.get_result())
+            return report_obj.get_result()
         except KeyError as e:
-            print(f'Отчёт {e} не найден')
+            return f'Отчёт {e} не найден'
         except FileNotFoundError as e:
-            print(f'Файл "{e.filename}" не найден')
-        return
+            return f'Файл "{e.filename}" не найден'
 
 
 if __name__ == '__main__':
     handler = Handler()
-    handler.get()
+    print(handler.get())
