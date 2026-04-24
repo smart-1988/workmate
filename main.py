@@ -32,7 +32,7 @@ class ClickbaitReport(MainReport):
 
     def _valid_output(self, d):
         if d.get('ctr') and d.get('retention_rate'):
-            if float(d['ctr']) > 15 and float(d['retention_rate']) > 40:
+            if float(d['ctr']) > 15 and float(d['retention_rate']) < 40:
                 return True
 
     def _get_summary_list(self):
